@@ -6,3 +6,14 @@ enum CloudPushServiceTarget{
   ACCOUNT_TARGET,
   ALIAS_TARGET
 }
+
+enum AndroidNotificationImportance{
+  MIN,
+  LOW,
+  DEFAULT,
+  HIGH,
+  MAX
+}
+
+
+

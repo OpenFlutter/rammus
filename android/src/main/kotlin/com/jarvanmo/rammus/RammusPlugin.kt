@@ -13,6 +13,13 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import kotlin.concurrent.thread
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
+import android.os.Build
+
+
 
 
 class RammusPlugin(private val registrar: Registrar, private val methodChannel: MethodChannel) : MethodCallHandler {
@@ -20,6 +27,7 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "com.jarvanmo/rammus")
+            RammusPushHandler.methodChannel = channel
             channel.setMethodCallHandler(RammusPlugin(registrar, channel))
         }
     }
@@ -41,6 +49,7 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
             call.method == "addAlias" -> addAlias(call, result)
             call.method == "removeAlias" -> removeAlias(call, result)
             call.method == "listAliases" -> listAliases(result)
+            call.method == "setupNotificationManager" -> setupNotificationManager(call, result)
             else -> result.notImplemented()
         }
 
@@ -48,7 +57,6 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
 
 
     private fun initCloudChannel(call: MethodCall, result: Result) {
-        PushServiceFactory.init(registrar.context().applicationContext)
         val pushService = PushServiceFactory.getCloudPushService()
         val appKey = call.argument<String?>("appKey")
         val appSecret = call.argument<String?>("appSecret")
@@ -60,26 +68,26 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
 
         val callback = object : CommonCallback {
             override fun onSuccess(response: String?) {
-//                handler.post {
-////                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
-////                            "isSuccessful" to true,
-////                            "response" to response
-////                    ))
-////                    RammusPushHandler.methodChannel = methodChannel
-////                }
+                handler.post {
+                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
+                            "isSuccessful" to true,
+                            "response" to response
+                    ))
+                    RammusPushHandler.methodChannel = methodChannel
+                }
 
                 Log.e("TAG","成功")
 
             }
 
             override fun onFailed(errorCode: String?, errorMessage: String?) {
-//                handler.post {
-//                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
-//                            "isSuccessful" to false,
-//                            "errorCode" to errorCode,
-//                            "errorMessage" to errorMessage
-//                    ))
-//                }
+                handler.post {
+                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
+                            "isSuccessful" to false,
+                            "errorCode" to errorCode,
+                            "errorMessage" to errorMessage
+                    ))
+                }
 
                 Log.e("TAG","失败")
 
@@ -87,17 +95,17 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
 
         }
         if (appKey.isNullOrBlank() || appSecret.isNullOrBlank()) {
-            thread{
+//            thread{
 //                Looper.prepare()
                 pushService.register(registrar.context().applicationContext, callback)
 //                Looper.loop()
-            }
+//            }
         } else {
-            thread{
+//            thread{
 //                Looper.prepare()
                 pushService.register(registrar.context().applicationContext, appKey, appSecret, callback)
 //                Looper.loop()
-            }
+//            }
         }
 
         result.success(true)
@@ -360,4 +368,31 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         })
     }
 
+
+    private fun setupNotificationManager(call: MethodCall, result: Result){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val mNotificationManager = registrar.context().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            // 通知渠道的id
+            val id = call.argument("id")?:registrar.context().packageName
+            // 用户可以看到的通知渠道的名字.
+            val name = call.argument("name")?:registrar.context().packageName
+            // 用户可以看到的通知渠道的描述
+            val description = call.argument("description")?:registrar.context().packageName
+            val importance = call.argument("importance")?:NotificationManager.IMPORTANCE_DEFAULT
+            val mChannel = NotificationChannel(id, name, importance)
+            // 配置通知渠道的属性
+            mChannel.description = description
+            // 设置通知出现时的闪灯（如果 android 设备支持的话）
+//            mChannel.enableLights(true)
+//            mChannel.lightColor = Color.RED
+            // 设置通知出现时的震动（如果 android 设备支持的话）
+//            mChannel.enableVibration(true)
+//            mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+            //最后在notificationmanager中创建该通知渠道
+            mNotificationManager.createNotificationChannel(mChannel)
+
+            result.success(true)
+        }
+
+    }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:rammus/rammus.dart' as rammus;
 
 void main() => runApp(MyApp());
@@ -18,10 +17,41 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    rammus.setupNotificationManager(description: "rammus test",name: "rammus",id: "fff");
     rammus.initCloudChannelResult.listen((data){
-      print("init successful ${data.isSuccessful} ${data.errorCode} ${data.errorMessage}");
+      print("----------->init successful ${data.isSuccessful} ${data.errorCode} ${data.errorMessage}");
     });
+
+    rammus.onNotification.listen((data){
+      print("----------->notification here ${data.summary}");
+      setState(() {
+        _platformVersion = data.summary;
+      });
+    });
+    rammus.onNotificationOpened.listen((data){
+      print("-----------> ${data.summary} 被点了");
+      setState(() {
+        _platformVersion ="${data.summary} 被点了";
+      });
+    });
+
+    rammus.onNotificationRemoved.listen((data){
+      print("-----------> $data 被删除了");
+
+    });
+
+    rammus.onNotificationReceivedInApp.listen((data){
+      print("-----------> ${data.summary} In app");
+
+    });
+
+    rammus.onNotificationClickedWithNoAction.listen((data){
+      print("${data.summary} no action");
+
+    });
+
     rammus.onMessageArrived.listen((data){
+      print("received data -> ${data.content}");
       setState(() {
         _platformVersion = data.content;
       });

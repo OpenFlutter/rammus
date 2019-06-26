@@ -20,7 +20,7 @@ class OnNotification{
 class OnNotificationOpened{
   final String title;
   final String summary;
-  final Map extras;
+  final String extras;
 
   OnNotificationOpened(this.title, this.summary, this.extras);
 }

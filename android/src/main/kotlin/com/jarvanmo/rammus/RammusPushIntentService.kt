@@ -2,6 +2,7 @@ package com.jarvanmo.rammus
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import com.alibaba.sdk.android.push.AliyunMessageIntentService
 import com.alibaba.sdk.android.push.notification.CPushMessage
 
@@ -14,14 +15,17 @@ class RammusPushIntentService : AliyunMessageIntentService() {
     val handler = Handler()
 
     override fun onNotificationRemoved(context: Context, messageId: String?) {
+//        Log.e("TAG","data-2 is $messageId")
+
         handler.post {
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationRemoved", messageId)
         }
     }
 
     override fun onNotification(context: Context, title: String?, summary: String?, extras: MutableMap<String, String>?) {
-//        Context context, String title, String summary, Map<String, String> extraMap)
+//        Log.e("TAG","data-1 is ${summary}")
 
+//        Context context, String title, String summary, Map<String, String> extraMap)
         handler.post {
 
             RammusPushHandler.methodChannel?.invokeMethod("onNotification", mapOf(
@@ -33,6 +37,8 @@ class RammusPushIntentService : AliyunMessageIntentService() {
     }
 
     override fun onMessage(context: Context, message: CPushMessage) {
+//        Log.e("TAG","data1 is ${message.content}")
+
         handler.post {
             RammusPushHandler.methodChannel?.invokeMethod("onMessageArrived", mapOf(
                     "appId" to message.appId,
@@ -45,6 +51,9 @@ class RammusPushIntentService : AliyunMessageIntentService() {
     }
 
     override fun onNotificationOpened(p0: Context?, title: String?, summary: String?, extras: String?) {
+
+//        Log.e("TAG","data2 is $summary")
+
         handler.post {
 
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationOpened", mapOf(
@@ -56,6 +65,8 @@ class RammusPushIntentService : AliyunMessageIntentService() {
     }
 
     override fun onNotificationReceivedInApp(p0: Context?, title: String?, summary: String?, extras: MutableMap<String, String>?, openType: Int, openActivity: String?, openUrl: String?) {
+//        Log.e("TAG","data3 is $summary")
+
         handler.post {
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationReceivedInApp", mapOf(
                     "title" to title,
@@ -69,6 +80,8 @@ class RammusPushIntentService : AliyunMessageIntentService() {
     }
 
     override fun onNotificationClickedWithNoAction(context: Context, title: String?, summary: String?, extras: String?) {
+//        Log.e("TAG","data4 is $summary")
+
         handler.post {
 
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationClickedWithNoAction", mapOf(

@@ -15,10 +15,10 @@
 
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="27663004" /> <!-- 请填写你自己的- appKey -->
+            android:value="" /> <!-- 请填写你自己的- appKey -->
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="8eade79b37dd21ed1c0ac5d8565f95f2" /> <!-- 请填写你自己的appSecret -->
+            android:value="" /> <!-- 请填写你自己的appSecret -->
 
         <activity
             android:name=".MainActivity"

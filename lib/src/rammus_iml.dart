@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'cloud_push_message.dart';
-import 'cloud_push_service_target.dart';
+import 'cloud_push_service_enums.dart';
 import 'common_callback_result.dart';
 
 final MethodChannel _channel = const MethodChannel('com.jarvanmo/rammus')
@@ -20,7 +20,6 @@ StreamController<CommonCallbackResult> _initCloudChannelResultController =
 ///请在网络通畅的情况下进行相关的初始化调试，如果网络不通，或者App信息配置错误，在onFailed方法中，会有相应的错误码返回，可参考错误处理
 Stream<CommonCallbackResult> get initCloudChannelResult =>
     _initCloudChannelResultController.stream;
-
 
 ///用于接收服务端推送的消息。
 ///消息不会弹窗，而是回调该方法。
@@ -40,16 +39,16 @@ Stream<OnNotification> get onNotification => _onNotificationController.stream;
 ///打开通知时会回调该方法，通知打开上报由SDK自动完成。
 StreamController<OnNotificationOpened> _onNotificationOpenedController =
     StreamController.broadcast();
+
 Stream<OnNotificationOpened> get onNotificationOpened =>
     _onNotificationOpenedController.stream;
-
 
 ///删除通知时回调该方法，通知删除上报由SDK自动完成。
 StreamController<String> _onNotificationRemovedController =
     StreamController.broadcast();
+
 Stream<String> get onNotificationRemoved =>
     _onNotificationRemovedController.stream;
-
 
 ///打开无跳转逻辑(open=4)通知时回调该方法(v2.3.2及以上版本支持)，通知打开上报由SDK自动完成。
 StreamController<OnNotificationClickedWithNoAction>
@@ -58,7 +57,6 @@ StreamController<OnNotificationClickedWithNoAction>
 Stream<OnNotificationClickedWithNoAction>
     get onNotificationClickedWithNoAction =>
         _onNotificationClickedWithNoActionController.stream;
-
 
 ///当用户创建自定义通知样式，并且设置推送应用内到达不创建通知弹窗时调用该回调，且此时不调用onNotification回调(v2.3.3及以上版本支持)
 StreamController<OnNotificationReceivedInApp>
@@ -259,7 +257,27 @@ Future<CommonCallbackResult> listAliases() async {
   );
 }
 
+///这个方法只对android有效
+///最好调用这个方法以保证在Android 8以上推送通知好用。
+///如果不调用这个方法，请确认你自己创建了NotificationChannel。
+///为了更好的用户体验，一些参数请不要用传[null]。
+///[id]一定要和后台推送时候设置的通知通道一样，否则Android8.0以上无法完成通知推送。
+Future setupNotificationManager(
+    {String id,
+    String name,
+    String description,
+    AndroidNotificationImportance importance =
+        AndroidNotificationImportance.DEFAULT}) async {
+  return _channel.invokeMethod("setupNotificationManager", {
+    "id": id,
+    "name": name,
+    "description": description,
+    "importance": importance.index + 1
+  });
+}
+
 Future<dynamic> _handler(MethodCall methodCall) {
+
   if ("initCloudChannelResult" == methodCall.method) {
     _initCloudChannelResultController.add(CommonCallbackResult(
       isSuccessful: methodCall.arguments["isSuccessful"],
@@ -278,6 +296,11 @@ Future<dynamic> _handler(MethodCall methodCall) {
   } else if ("onNotification" == methodCall.method) {
     _onNotificationController.add(OnNotification(methodCall.arguments["title"],
         methodCall.arguments["summary"], methodCall.arguments["extras"]));
+  } else if ("onNotificationOpened" == methodCall.method) {
+    _onNotificationOpenedController.add(OnNotificationOpened(
+        methodCall.arguments["title"],
+        methodCall.arguments["summary"],
+        methodCall.arguments["extras"]));
   } else if ("onNotificationRemoved" == methodCall.method) {
     _onNotificationRemovedController.add(methodCall.arguments);
   } else if ("onNotificationClickedWithNoAction" == methodCall.method) {
