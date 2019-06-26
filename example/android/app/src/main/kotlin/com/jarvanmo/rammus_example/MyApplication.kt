@@ -38,7 +38,6 @@ class MyApplication:FlutterApplication() {
         }
 
         pushService.register(applicationContext,callback)
-        pushService.setLogLevel(LOG_INFO)
         pushService.setPushIntentService(RammusPushIntentService::class.java)
 
     }
