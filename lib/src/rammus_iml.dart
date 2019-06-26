@@ -89,10 +89,10 @@ Future<CommonCallbackResult> get pushChannelStatus async {
 
 ///这个返回结果永远都是[true]，并不是SDK初始化结果
 ///初始化结果请监听[initCloudChannelResult]
-Future<bool> initCloudChannel({String appKey, String appSecret}) async {
-  return await _channel.invokeMethod(
-      "initCloudChannel", {"appKey": appKey, "appSecret": appSecret});
-}
+//Future<bool> initCloudChannel({String appKey, String appSecret}) async {
+//  return await _channel.invokeMethod(
+//      "initCloudChannel", {"appKey": appKey, "appSecret": appSecret});
+//}
 
 Future<CommonCallbackResult> turnOnPushChannel() async {
   var result = await _channel.invokeMethod("turnOnPushChannel");

@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
         _platformVersion = data.content;
       });
     });
-    rammus.initCloudChannel( );
+//    rammus.initCloudChannel( );
 
   }
 
