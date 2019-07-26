@@ -280,12 +280,12 @@ Future setupNotificationManager(
 Future<dynamic> _handler(MethodCall methodCall) {
 
   if ("initCloudChannelResult" == methodCall.method) {
-    _initCloudChannelResultController.add(CommonCallbackResult(
-      isSuccessful: methodCall.arguments["isSuccessful"],
-      response: methodCall.arguments["response"],
-      errorCode: methodCall.arguments["errorCode"],
-      errorMessage: methodCall.arguments["errorMessage"],
-    ));
+//    _initCloudChannelResultController.add(CommonCallbackResult(
+//      isSuccessful: methodCall.arguments["isSuccessful"],
+//      response: methodCall.arguments["response"],
+//      errorCode: methodCall.arguments["errorCode"],
+//      errorMessage: methodCall.arguments["errorMessage"],
+//    ));
   } else if ("onMessageArrived" == methodCall.method) {
     _onMessageArrivedController.add(CloudPushMessage(
       messageId: methodCall.arguments["messageId"],
@@ -322,7 +322,7 @@ Future<dynamic> _handler(MethodCall methodCall) {
 }
 
 dispose() {
-  _initCloudChannelResultController.close();
+//  _initCloudChannelResultController.close();
   _onMessageArrivedController.close();
   _onNotificationController.close();
   _onNotificationRemovedController.close();
