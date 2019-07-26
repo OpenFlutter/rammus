@@ -299,6 +299,7 @@ __weak FlutterMethodChannel *_methodChannel;
         result[@"messageId"] = request.identifier;
     }
 
+    NSLog(@"ddddddddddddddddddddddddddddddd");
     [_methodChannel invokeMethod:@"onNotification" arguments:result];
 }
 
