@@ -18,9 +18,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initPlatformState();
     rammus.setupNotificationManager(description: "rammus test",name: "rammus",id: "fff");
-    rammus.initCloudChannelResult.listen((data){
-      print("----------->init successful ${data.isSuccessful} ${data.errorCode} ${data.errorMessage}");
-    });
+//    rammus.initCloudChannelResult.listen((data){
+//      print("----------->init successful ${data.isSuccessful} ${data.errorCode} ${data.errorMessage}");
+//    });
 
     rammus.onNotification.listen((data){
       print("----------->notification here ${data.summary}");

@@ -18,7 +18,7 @@ A new Flutter plugin for AliCloud push.
   s.dependency 'AlicloudPush', '~> 1.9.8'
 
   s.frameworks = ["SystemConfiguration", "CoreTelephony"]
-  s.libraries = ["z", "sqlite3.0", "esolv"]
+  s.libraries = ["z", "sqlite3.0", "resolv"]
 
   s.ios.deployment_target = '8.0'
 end
