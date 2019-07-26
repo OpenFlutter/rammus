@@ -1,10 +1,11 @@
 package com.jarvanmo.rammus
 
-import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import com.alibaba.sdk.android.push.ChannelService
 import com.alibaba.sdk.android.push.CommonCallback
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory
 import io.flutter.plugin.common.MethodCall
@@ -12,14 +13,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import kotlin.concurrent.thread
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
-import android.os.Build
-
-
 
 
 class RammusPlugin(private val registrar: Registrar, private val methodChannel: MethodChannel) : MethodCallHandler {
@@ -32,7 +25,7 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         }
     }
 
-    private  val handler = Handler()
+    private val handler = Handler()
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when {
@@ -57,58 +50,55 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
 
 
     private fun initCloudChannel(call: MethodCall, result: Result) {
-        val pushService = PushServiceFactory.getCloudPushService()
-        val appKey = call.argument<String?>("appKey")
-        val appSecret = call.argument<String?>("appSecret")
-
-        val initCloudChannelResult = "initCloudChannelResult"
-
-
-        pushService.setPushIntentService(RammusPushIntentService::class.java)
-
-        val callback = object : CommonCallback {
-            override fun onSuccess(response: String?) {
-                handler.post {
-                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
-                            "isSuccessful" to true,
-                            "response" to response
-                    ))
-                    RammusPushHandler.methodChannel = methodChannel
-                }
-
-                Log.e("TAG","成功")
-
-            }
-
-            override fun onFailed(errorCode: String?, errorMessage: String?) {
-                handler.post {
-                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
-                            "isSuccessful" to false,
-                            "errorCode" to errorCode,
-                            "errorMessage" to errorMessage
-                    ))
-                }
-
-                Log.e("TAG","失败")
-
-            }
-
-        }
-        if (appKey.isNullOrBlank() || appSecret.isNullOrBlank()) {
-//            thread{
-//                Looper.prepare()
-                pushService.register(registrar.context().applicationContext, callback)
-//                Looper.loop()
-//            }
-        } else {
-//            thread{
-//                Looper.prepare()
-                pushService.register(registrar.context().applicationContext, appKey, appSecret, callback)
-//                Looper.loop()
-//            }
-        }
-
         result.success(true)
+//        val pushService = PushServiceFactory.getCloudPushService()
+//        val appKey = call.argument<String?>("appKey")
+//        val appSecret = call.argument<String?>("appSecret")
+//
+//        val initCloudChannelResult = "initCloudChannelResult"
+//
+//
+//        pushService.setPushIntentService(RammusPushIntentService::class.java)
+//
+//        val callback = object : CommonCallback {
+//            override fun onSuccess(response: String?) {
+//                handler.post {
+//                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
+//                            "isSuccessful" to true,
+//                            "response" to response
+//                    ))
+//                    RammusPushHandler.methodChannel = methodChannel
+//                }
+//
+//                Log.e("TAG", "成功")
+//
+//            }
+//
+//            override fun onFailed(errorCode: String?, errorMessage: String?) {
+//                handler.post {
+//                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
+//                            "isSuccessful" to false,
+//                            "errorCode" to errorCode,
+//                            "errorMessage" to errorMessage
+//                    ))
+//                }
+//
+//                Log.e("TAG", "失败")
+//
+//            }
+//
+//        }
+//        if (appKey.isNullOrBlank() || appSecret.isNullOrBlank()) {
+//
+//            pushService.register(registrar.context().applicationContext, callback)
+//
+//        } else {
+//
+//            pushService.register(registrar.context().applicationContext, appKey, appSecret, callback)
+//
+//        }
+//
+//        result.success(true)
     }
 
 
@@ -369,16 +359,16 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
     }
 
 
-    private fun setupNotificationManager(call: MethodCall, result: Result){
+    private fun setupNotificationManager(call: MethodCall, result: Result) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val mNotificationManager = registrar.context().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             // 通知渠道的id
-            val id = call.argument("id")?:registrar.context().packageName
+            val id = call.argument("id") ?: registrar.context().packageName
             // 用户可以看到的通知渠道的名字.
-            val name = call.argument("name")?:registrar.context().packageName
+            val name = call.argument("name") ?: registrar.context().packageName
             // 用户可以看到的通知渠道的描述
-            val description = call.argument("description")?:registrar.context().packageName
-            val importance = call.argument("importance")?:NotificationManager.IMPORTANCE_DEFAULT
+            val description = call.argument("description") ?: registrar.context().packageName
+            val importance = call.argument("importance") ?: NotificationManager.IMPORTANCE_DEFAULT
             val mChannel = NotificationChannel(id, name, importance)
             // 配置通知渠道的属性
             mChannel.description = description

@@ -127,21 +127,21 @@ Future<CommonCallbackResult> bindAccount(String account) async {
 
   var result = await _channel.invokeMethod("bindAccount", account);
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 Future<CommonCallbackResult> unbindAccount() async {
   var result = await _channel.invokeMethod("unbindAccount");
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 //void bindTag(int target, String[] tags, String alias, CommonCallback callback);
@@ -166,11 +166,11 @@ Future<CommonCallbackResult> bindTag(
   });
 
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 ///Android 文档
@@ -194,11 +194,11 @@ Future<CommonCallbackResult> unbindTag(
   });
 
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 ///Android 文档
@@ -208,11 +208,11 @@ Future<CommonCallbackResult> unbindTag(
 Future<CommonCallbackResult> listTags(CloudPushServiceTarget target) async {
   var result = await _channel.invokeMethod("listTags", target.index + 1);
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 ///Android 文档
@@ -223,11 +223,11 @@ Future<CommonCallbackResult> listTags(CloudPushServiceTarget target) async {
 Future<CommonCallbackResult> addAlias(String alias) async {
   var result = await _channel.invokeMethod("addAlias", alias);
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 ///Android 文档
@@ -237,11 +237,11 @@ Future<CommonCallbackResult> addAlias(String alias) async {
 Future<CommonCallbackResult> removeAlias(String alias) async {
   var result = await _channel.invokeMethod("removeAlias", alias);
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 ///Android 文档
@@ -251,11 +251,11 @@ Future<CommonCallbackResult> removeAlias(String alias) async {
 Future<CommonCallbackResult> listAliases() async {
   var result = await _channel.invokeMethod("listAliases");
   return CommonCallbackResult(
-    isSuccessful: result["isSuccessful"],
-    response: result["response"],
-    errorCode: result["errorCode"],
-    errorMessage: result["errorMessage"],
-  );
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
 }
 
 ///这个方法只对android有效
@@ -278,7 +278,6 @@ Future setupNotificationManager(
 }
 
 Future<dynamic> _handler(MethodCall methodCall) {
-
   if ("initCloudChannelResult" == methodCall.method) {
 //    _initCloudChannelResultController.add(CommonCallbackResult(
 //      isSuccessful: methodCall.arguments["isSuccessful"],
@@ -301,7 +300,10 @@ Future<dynamic> _handler(MethodCall methodCall) {
     _onNotificationOpenedController.add(OnNotificationOpened(
         methodCall.arguments["title"],
         methodCall.arguments["summary"],
-        methodCall.arguments["extras"]));
+        methodCall.arguments["extras"],
+        methodCall.arguments["subtitle"],
+        methodCall.arguments["badge"]
+    ));
   } else if ("onNotificationRemoved" == methodCall.method) {
     _onNotificationRemovedController.add(methodCall.arguments);
   } else if ("onNotificationClickedWithNoAction" == methodCall.method) {

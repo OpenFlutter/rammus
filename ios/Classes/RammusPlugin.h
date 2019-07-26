@@ -1,4 +1,5 @@
 #import <Flutter/Flutter.h>
-
-@interface RammusPlugin : NSObject<FlutterPlugin>
+#import <UserNotifications/UserNotifications.h>
+#import <CloudPushSDK/CloudPushSDK.h>
+@interface RammusPlugin : NSObject<FlutterPlugin,UNUserNotificationCenterDelegate>
 @end
