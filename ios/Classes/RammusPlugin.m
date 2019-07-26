@@ -21,14 +21,14 @@ NSString *_isSuccessful = @"isSuccessful";
 //__weak NSDictionary *_launchOptions;
 
 __weak FlutterMethodChannel *_methodChannel;
-
+UNNotificationPresentationOptions _notificationPresentationOption = UNNotificationPresentationOptionNone;
 
 - (instancetype)initWithRegistrar:(NSObject <FlutterPluginRegistrar> *)registrar methodChannel:(FlutterMethodChannel *)flutterMethodChannel {
     self = [super init];
-    if(self){
+    if (self) {
         _methodChannel = flutterMethodChannel;
     }
-    return  self;
+    return self;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
@@ -44,18 +44,21 @@ __weak FlutterMethodChannel *_methodChannel;
         [self bindTag:call result:result];
     } else if ([@"unbindTag" isEqualToString:call.method]) {
         [self unbindTag:call result:result];
-    } else if([@"listTags" isEqualToString:call.method]){
+    } else if ([@"listTags" isEqualToString:call.method]) {
         [self listTags:call result:result];
-    }else if([@"addAlias" isEqualToString:call.method]){
+    } else if ([@"addAlias" isEqualToString:call.method]) {
         [self addAlias:call result:result];
-    }else if([@"removeAlias" isEqualToString:call.method]){
+    } else if ([@"removeAlias" isEqualToString:call.method]) {
         [self removeAlias:call result:result];
-    }else if([@"listAliases" isEqualToString:call.method]){
+    } else if ([@"listAliases" isEqualToString:call.method]) {
         [self listAliases:call result:result];
+    }else if([@"configureNotificationPresentationOption" isEqualToString:call.method]){
+        [self configureNotificationPresentationOption:call result:result];
     }else {
         result(FlutterMethodNotImplemented);
     }
 }
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 //    _launchOptions = launchOptions;
@@ -123,7 +126,7 @@ __weak FlutterMethodChannel *_methodChannel;
  *  主动获取设备通知是否授权(iOS 10+)
  */
 - (void)getNotificationSettingStatus {
-    [_notificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+    [_notificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *_Nonnull settings) {
         if (settings.authorizationStatus == UNAuthorizationStatusAuthorized) {
             NSLog(@"User authed.");
         } else {
@@ -152,7 +155,6 @@ __weak FlutterMethodChannel *_methodChannel;
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"didFailToRegisterForRemoteNotificationsWithError %@", error);
 }
-
 
 
 #pragma mark SDK Init
@@ -227,15 +229,15 @@ __weak FlutterMethodChannel *_methodChannel;
 //            }
 
             [_methodChannel invokeMethod:@"onMessageArrived" arguments:@{
-                @"title":title,
-                @"content":body
+                    @"title": title,
+                    @"content": body
             }];
 
         });
     } else {
         [_methodChannel invokeMethod:@"onMessageArrived" arguments:@{
-                @"title":title,
-                @"content":body
+                @"title": title,
+                @"content": body
         }];
 //        if (tempVO.messageContent != nil) {
 //            [self insertPushMessage:tempVO];
@@ -274,32 +276,31 @@ __weak FlutterMethodChannel *_methodChannel;
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     NSLog(@"Notification, date: %@, title: %@, subtitle: %@, body: %@, badge: %d, extras: %@.", noticeDate, title, subtitle, body, badge, extras);
 
-    if(title != nil){
+    if (title != nil) {
         result[@"title"] = title;
     }
 
-    if(body != nil){
+    if (body != nil) {
         result[@"summary"] = body;
     }
 
-    if(extras != nil){
+    if (extras != nil) {
         result[@"extras"] = extras;
     }
 
-    if(subtitle != nil){
+    if (subtitle != nil) {
         result[@"subtitle"] = subtitle;
     }
 
 
-    if(badge != nil){
+    if (badge != nil) {
         result[@"badge"] = @(badge);
     }
 
-    if(request.identifier != nil){
+    if (request.identifier != nil) {
         result[@"messageId"] = request.identifier;
     }
 
-    NSLog(@"ddddddddddddddddddddddddddddddd");
     [_methodChannel invokeMethod:@"onNotification" arguments:result];
 }
 
@@ -311,11 +312,12 @@ __weak FlutterMethodChannel *_methodChannel;
     NSLog(@"Receive a notification in foregound.");
     // 处理iOS 10通知，并上报通知打开回执
     [self handleiOS10Notification:notification];
+    completionHandler(_notificationPresentationOption);
     // 通知不弹出
-    completionHandler(UNNotificationPresentationOptionNone);
+//    completionHandler(UNNotificationPresentationOptionNone);
 
     // 通知弹出，且带有声音、内容和角标
-    //completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
+//    completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 }
 
 
@@ -355,10 +357,14 @@ __weak FlutterMethodChannel *_methodChannel;
 - (void)bindAccount:(FlutterMethodCall *)call result:(FlutterResult)result {
     [CloudPushSDK bindAccount:(NSString *) call.arguments withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
-
         }
     }];
 }
@@ -366,7 +372,12 @@ __weak FlutterMethodChannel *_methodChannel;
 - (void)unbindAccount:(FlutterMethodCall *)call result:(FlutterResult)result {
     [CloudPushSDK unbindAccount:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
@@ -382,19 +393,29 @@ __weak FlutterMethodChannel *_methodChannel;
     NSString *alias = (call.arguments[@"alias"] == (id) [NSNull null]) ? nil : call.arguments[@"alias"];
     [CloudPushSDK bindTag:target.intValue withTags:call.arguments[@"tags"] withAlias:alias withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
     }];
 }
 
--(void)unbindTag:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)unbindTag:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSNumber *target = (call.arguments[@"target"] == (id) [NSNull null]) ? @1 : call.arguments[@"target"];
     NSString *alias = (call.arguments[@"alias"] == (id) [NSNull null]) ? nil : call.arguments[@"alias"];
     [CloudPushSDK unbindTag:target.intValue withTags:call.arguments[@"tags"] withAlias:alias withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
@@ -402,11 +423,16 @@ __weak FlutterMethodChannel *_methodChannel;
 }
 
 
--(void)listTags:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)listTags:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSNumber *target = (call.arguments == (id) [NSNull null]) ? @1 : call.arguments;
     [CloudPushSDK listTags:target.intValue withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
@@ -414,11 +440,16 @@ __weak FlutterMethodChannel *_methodChannel;
 }
 
 
--(void)addAlias:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)addAlias:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *alias = (call.arguments == (id) [NSNull null]) ? nil : call.arguments;
     [CloudPushSDK addAlias:alias withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
@@ -426,11 +457,16 @@ __weak FlutterMethodChannel *_methodChannel;
 }
 
 
--(void)removeAlias:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)removeAlias:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *alias = (call.arguments == (id) [NSNull null]) ? nil : call.arguments;
     [CloudPushSDK removeAlias:alias withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
@@ -438,14 +474,46 @@ __weak FlutterMethodChannel *_methodChannel;
 }
 
 
--(void)listAliases:(FlutterMethodCall *)call result:(FlutterResult)result {
+- (void)listAliases:(FlutterMethodCall *)call result:(FlutterResult)result {
 
     [CloudPushSDK listAliases:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            result(@{_isSuccessful: @YES, @"response": res.data});
+            if (res.data == nil) {
+                result(@{_isSuccessful: @YES});
+            } else {
+                result(@{_isSuccessful: @YES, @"response": res.data});
+
+            };
         } else {
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
     }];
 }
+
+
+- (void)configureNotificationPresentationOption:(FlutterMethodCall *)call result:(FlutterResult)result {
+//    {"none": none, "sound": sound, "alert": alert, "badge": badge});
+
+    BOOL none = [call.arguments[@"none"] boolValue];
+    if(none){
+        _notificationPresentationOption = _notificationPresentationOption|UNNotificationPresentationOptionNone;
+    }
+
+    BOOL sound = [call.arguments[@"none"] boolValue];
+    if(sound){
+        _notificationPresentationOption = _notificationPresentationOption |UNNotificationPresentationOptionSound;
+    }
+
+    BOOL alert = [call.arguments[@"none"] boolValue];
+    if(alert){
+        _notificationPresentationOption = _notificationPresentationOption | UNNotificationPresentationOptionAlert;
+    }
+
+    BOOL badge = [call.arguments[@"none"] boolValue];
+    if(badge){
+        _notificationPresentationOption = _notificationPresentationOption | UNNotificationPresentationOptionBadge;
+    }
+
+}
+
 @end

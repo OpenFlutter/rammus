@@ -277,6 +277,15 @@ Future setupNotificationManager(
   });
 }
 
+///这个方法仅针对iOS
+///设置推送通知显示方式
+///    completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
+Future configureNotificationPresentationOption(
+    {bool none: false, bool sound: true, bool alert: true, bool badge}) async {
+  return _channel.invokeMethod("configureNotificationPresentationOption",
+      {"none": none, "sound": sound, "alert": alert, "badge": badge});
+}
+
 Future<dynamic> _handler(MethodCall methodCall) {
   if ("initCloudChannelResult" == methodCall.method) {
 //    _initCloudChannelResultController.add(CommonCallbackResult(
@@ -302,8 +311,7 @@ Future<dynamic> _handler(MethodCall methodCall) {
         methodCall.arguments["summary"],
         methodCall.arguments["extras"],
         methodCall.arguments["subtitle"],
-        methodCall.arguments["badge"]
-    ));
+        methodCall.arguments["badge"]));
   } else if ("onNotificationRemoved" == methodCall.method) {
     _onNotificationRemovedController.add(methodCall.arguments);
   } else if ("onNotificationClickedWithNoAction" == methodCall.method) {
