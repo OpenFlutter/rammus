@@ -270,15 +270,35 @@ __weak FlutterMethodChannel *_methodChannel;
     // [self syncBadgeNum:0];
     // 通知打开回执上报
     [CloudPushSDK sendNotificationAck:userInfo];
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     NSLog(@"Notification, date: %@, title: %@, subtitle: %@, body: %@, badge: %d, extras: %@.", noticeDate, title, subtitle, body, badge, extras);
-    [_methodChannel invokeMethod:@"onNotificationOpened" arguments:@{
-            @"title":title,
-            @"summary":body,
-            @"extras":extras,
-            @"subtitle":subtitle,
-            @"badge":@(badge),
-            @"messageId":request.identifier
-    }];
+
+    if(title != nil){
+        result[@"title"] = title;
+    }
+
+    if(body != nil){
+        result[@"summary"] = body;
+    }
+
+    if(extras != nil){
+        result[@"extras"] = extras;
+    }
+
+    if(subtitle != nil){
+        result[@"subtitle"] = subtitle;
+    }
+
+
+    if(badge != nil){
+        result[@"badge"] = @(badge);
+    }
+
+    if(request.identifier != nil){
+        result[@"messageId"] = request.identifier;
+    }
+
+    [_methodChannel invokeMethod:@"onNotificationOpened" arguments:result];
 }
 
 
