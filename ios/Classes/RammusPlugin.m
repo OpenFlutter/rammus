@@ -248,6 +248,8 @@ __weak FlutterMethodChannel *_methodChannel;
  *  处理iOS 10通知(iOS 10+)
  */
 - (void)handleiOS10Notification:(UNNotification *)notification {
+
+    NSLog(@"handle notification");
     UNNotificationRequest *request = notification.request;
     UNNotificationContent *content = request.content;
 
