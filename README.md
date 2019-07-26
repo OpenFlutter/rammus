@@ -53,3 +53,28 @@
 `pushService.setPushIntentService(RammusPushIntentService::class.java)`千万不要忘记设置了。
 
 > Application在Android原生项目里。不会创建的自行百度。
+
+
+## iOS上的配置
+
+稍微有点麻烦。
+
+### 添加一下源
+
+在项目中的`PodFile`前面加上下面的两句话
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/aliyun/aliyun-specs.git'
+```
+### 添加一下info.plist
+请参考[这个链接](https://help.aliyun.com/document_detail/30072.html?spm=a2c4g.11186623.6.630.396f40b1t4SLCb)把
+把`info.plist`添加到你的项目中。
+
+到此ios配置完了。
+
+### 关于iOS通知栏
+如果你想推送通知的时候在通知栏上有显示请确保调用了下面的代码：
+```dart
+  rammus.configureNotificationPresentationOption();
+```
+

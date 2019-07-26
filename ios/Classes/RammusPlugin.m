@@ -297,6 +297,7 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
         result[@"badge"] = @(badge);
     }
 
+
     if (request.identifier != nil) {
         result[@"messageId"] = request.identifier;
     }
