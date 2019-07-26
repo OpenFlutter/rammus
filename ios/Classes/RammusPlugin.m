@@ -249,7 +249,6 @@ __weak FlutterMethodChannel *_methodChannel;
  */
 - (void)handleiOS10Notification:(UNNotification *)notification {
 
-    NSLog(@"handle notification");
     UNNotificationRequest *request = notification.request;
     UNNotificationContent *content = request.content;
 
@@ -300,7 +299,7 @@ __weak FlutterMethodChannel *_methodChannel;
         result[@"messageId"] = request.identifier;
     }
 
-    [_methodChannel invokeMethod:@"onNotificationOpened" arguments:result];
+    [_methodChannel invokeMethod:@"onNotification" arguments:result];
 }
 
 
