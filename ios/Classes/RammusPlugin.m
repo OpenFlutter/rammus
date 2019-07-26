@@ -10,7 +10,7 @@ NSString *_isSuccessful = @"isSuccessful";
 
 + (void)registerWithRegistrar:(NSObject <FlutterPluginRegistrar> *)registrar {
     FlutterMethodChannel *channel = [FlutterMethodChannel
-            methodChannelWithName:@"rammus"
+            methodChannelWithName:@"com.jarvanmo/rammus"
                   binaryMessenger:[registrar messenger]];
     RammusPlugin *instance = [[RammusPlugin alloc] initWithRegistrar:registrar methodChannel:channel];
     [registrar addMethodCallDelegate:instance channel:channel];
