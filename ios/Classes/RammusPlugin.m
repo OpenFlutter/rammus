@@ -54,6 +54,8 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
         [self listAliases:call result:result];
     }else if([@"configureNotificationPresentationOption" isEqualToString:call.method]){
         [self configureNotificationPresentationOption:call result:result];
+    }else if([@"setupNotificationManager" isEqualToString:call.method]){
+        result(@YES);
     }else {
         result(FlutterMethodNotImplemented);
     }
@@ -514,6 +516,8 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
     if(badge){
         _notificationPresentationOption = _notificationPresentationOption | UNNotificationPresentationOptionBadge;
     }
+
+    result(@YES);
 
 }
 
