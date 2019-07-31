@@ -1,5 +1,5 @@
 name: rammus
-description: A new Flutter plugin for AliCloud push.
+description: Flutter plugin for AliCloud push, including both android and ios. Receive background messages and notifications.
 version: 0.0.2
 author: JarvanMo <jarvan.mo@gmail.com>
 homepage: https://github.com/OpenFlutter/rammus
