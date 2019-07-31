@@ -1,4 +1,4 @@
-# Rammus  [pub package](https://img.shields.io/pub/v/rammus.svg)
+# Rammus  ![pub package](https://img.shields.io/pub/v/rammus.svg)
 
 阿里云推送Flutter插件.
 
