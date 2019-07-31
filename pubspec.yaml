@@ -1,8 +1,8 @@
 name: rammus
 description: A new Flutter plugin for AliCloud push.
 version: 0.0.1
-author:
-homepage:
+author: JarvanMo <jarvan.mo@gmail.com>
+homepage: https://github.com/OpenFlutter/rammus
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
