@@ -79,7 +79,6 @@ Future<CommonCallbackResult> get pushChannelStatus async {
     errorCode: result["errorCode"],
     errorMessage: result["errorMessage"],
   );
-  ;
 }
 
 //  static Future<String> get platformVersion async {
