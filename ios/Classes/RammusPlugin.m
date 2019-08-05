@@ -502,17 +502,17 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
         _notificationPresentationOption = _notificationPresentationOption|UNNotificationPresentationOptionNone;
     }
 
-    BOOL sound = [call.arguments[@"none"] boolValue];
+    BOOL sound = [call.arguments[@"sound"] boolValue];
     if(sound){
         _notificationPresentationOption = _notificationPresentationOption |UNNotificationPresentationOptionSound;
     }
 
-    BOOL alert = [call.arguments[@"none"] boolValue];
+    BOOL alert = [call.arguments[@"alert"] boolValue];
     if(alert){
         _notificationPresentationOption = _notificationPresentationOption | UNNotificationPresentationOptionAlert;
     }
 
-    BOOL badge = [call.arguments[@"none"] boolValue];
+    BOOL badge = [call.arguments[@"badge"] boolValue];
     if(badge){
         _notificationPresentationOption = _notificationPresentationOption | UNNotificationPresentationOptionBadge;
     }
