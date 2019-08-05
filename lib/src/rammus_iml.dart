@@ -280,7 +280,7 @@ Future setupNotificationManager(
 ///设置推送通知显示方式
 ///    completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 Future configureNotificationPresentationOption(
-    {bool none: false, bool sound: true, bool alert: true, bool badge}) async {
+    {bool none: false, bool sound: true, bool alert: true, bool badge:true}) async {
   return _channel.invokeMethod("configureNotificationPresentationOption",
       {"none": none, "sound": sound, "alert": alert, "badge": badge});
 }
