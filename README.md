@@ -14,6 +14,8 @@
 
 [麻烦读下推送官方文档](https://help.aliyun.com/document_detail/51056.html?spm=a2c4g.11186623.6.623.47bf59abvM9j25)
 
+[Flutter使用Rammus实现阿里云推送](https://my.oschina.net/wupeilin/blog/3108695)
+
 ## Android上的配置
 
 ### 设置appKey,appSecret
