@@ -1,3 +1,7 @@
+## 0.0.4
+
+* use static framework
+
 ## 0.0.3
 
 * 修复ios通知栏不显示的问题
