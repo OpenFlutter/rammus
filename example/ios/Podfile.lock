@@ -1,11 +1,12 @@
 PODS:
-  - AlicloudPush (1.9.8):
+  - AlicloudPush (1.9.9):
     - AlicloudUT
     - AlicloudUtils
-  - AlicloudUT (5.2.0.5):
+  - AlicloudUT (5.2.0.8):
     - AlicloudUTDID
   - AlicloudUTDID (1.1.0.19)
-  - AlicloudUtils (1.3.6):
+  - AlicloudUtils (1.3.7):
+    - AlicloudUT
     - AlicloudUTDID
   - Flutter (1.0.0)
   - rammus (0.0.1):
@@ -30,13 +31,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/rammus/ios"
 
 SPEC CHECKSUMS:
-  AlicloudPush: 3bdd90f69af50562275483b5157571f0a7c50a19
-  AlicloudUT: 5e6a87a56c08ca72c6711beec2449e1c254728ef
+  AlicloudPush: c7cfdbd6a8034507c8772a052737f13ce607f32e
+  AlicloudUT: 49bfd91133899e693d1271b483ba7e64423b609e
   AlicloudUTDID: 79f509c3e997ef85fe307f8bfb2bb3be27f7e205
-  AlicloudUtils: 9047114c9c1854205ae26db58264bf1555242ffb
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
-  rammus: abfcb85e31aa73a8dda3711ddf7360f5f334254c
+  AlicloudUtils: 6fcdca0f544e312942c75c587230597c0afb908e
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  rammus: dc740c70ebfec2de986899d5946e082633d7f738
 
 PODFILE CHECKSUM: 780e706b311d38b827d75355a3c94c700ac52104
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.7.5

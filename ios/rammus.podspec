@@ -15,7 +15,7 @@ A new Flutter plugin for AliCloud push.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'AlicloudPush', '~> 1.9.8'
+  s.dependency 'AlicloudPush', '~> 1.9.9'
 
   s.frameworks = ["SystemConfiguration", "CoreTelephony"]
   s.libraries = ["z", "sqlite3.0", "resolv"]
