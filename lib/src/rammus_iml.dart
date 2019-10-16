@@ -143,6 +143,32 @@ Future<CommonCallbackResult> unbindAccount() async {
       iosError: result["iosError"]);
 }
 
+
+
+///Android only
+Future<CommonCallbackResult> bindPhoneNumber(String phoneNumber) async {
+  var result = await _channel.invokeMethod("bindPhoneNumber", phoneNumber);
+  return CommonCallbackResult(
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
+}
+
+
+///Android only
+
+Future<CommonCallbackResult> unbindPhoneNumber()async {
+  var result = await _channel.invokeMethod("unbindPhoneNumber");
+  return CommonCallbackResult(
+      isSuccessful: result["isSuccessful"],
+      response: result["response"],
+      errorCode: result["errorCode"],
+      errorMessage: result["errorMessage"],
+      iosError: result["iosError"]);
+}
+
 //void bindTag(int target, String[] tags, String alias, CommonCallback callback);
 ///Android 文档
 ///绑定标签到指定目标；
@@ -229,6 +255,7 @@ Future<CommonCallbackResult> addAlias(String alias) async {
       iosError: result["iosError"]);
 }
 
+
 ///Android 文档
 ///删除别名
 ///删除设备别名；
@@ -242,6 +269,8 @@ Future<CommonCallbackResult> removeAlias(String alias) async {
       errorMessage: result["errorMessage"],
       iosError: result["iosError"]);
 }
+
+
 
 ///Android 文档
 ///查询设备别名；
@@ -280,7 +309,10 @@ Future setupNotificationManager(
 ///设置推送通知显示方式
 ///    completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 Future configureNotificationPresentationOption(
-    {bool none: false, bool sound: true, bool alert: true, bool badge:true}) async {
+    {bool none: false,
+    bool sound: true,
+    bool alert: true,
+    bool badge: true}) async {
   return _channel.invokeMethod("configureNotificationPresentationOption",
       {"none": none, "sound": sound, "alert": alert, "badge": badge});
 }

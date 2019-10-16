@@ -40,7 +40,11 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
         [self bindAccount:call result:result];
     } else if ([@"unbindAccount" isEqualToString:call.method]) {
         [self unbindAccount:call result:result];
-    } else if ([@"bindTag" isEqualToString:call.method]) {
+    }  else if ([@"bindPhoneNumber" isEqualToString:call.method]) {
+           [self bindPhoneNumber:call result:result];
+       } else if ([@"unbindPhoneNumber" isEqualToString:call.method]) {
+           [self unbindPhoneNumber:call result:result];
+       } else if ([@"bindTag" isEqualToString:call.method]) {
         [self bindTag:call result:result];
     } else if ([@"unbindTag" isEqualToString:call.method]) {
         [self unbindTag:call result:result];
@@ -56,6 +60,7 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
         [self configureNotificationPresentationOption:call result:result];
     }else if([@"setupNotificationManager" isEqualToString:call.method]){
         result(@YES);
+        
     }else {
         result(FlutterMethodNotImplemented);
     }
@@ -385,6 +390,41 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
             result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
         }
     }];
+
+}
+
+
+- (void)bindPhoneNumber:(FlutterMethodCall *)call result:(FlutterResult)result {
+    result(@{_isSuccessful: @YES});
+
+//    [CloudPushSDK bindAccount:(NSString *) call.arguments withCallback:^(CloudPushCallbackResult *res) {
+//        if (res.success) {
+//            if (res.data == nil) {
+//                result(@{_isSuccessful: @YES});
+//            } else {
+//                result(@{_isSuccessful: @YES, @"response": res.data});
+//
+//            };
+//        } else {
+//            result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
+//        }
+//    }];
+}
+
+- (void)unbindPhoneNumber:(FlutterMethodCall *)call result:(FlutterResult)result {
+       result(@{_isSuccessful: @YES});
+//    [CloudPushSDK unbindAccount:^(CloudPushCallbackResult *res) {
+//        if (res.success) {
+//            if (res.data == nil) {
+//                result(@{_isSuccessful: @YES});
+//            } else {
+//                result(@{_isSuccessful: @YES, @"response": res.data});
+//
+//            };
+//        } else {
+//            result(@{_isSuccessful: @NO, @"errorCode": @(res.error.code), @"errorMessage": res.error.domain, @"iosError": [NSString stringWithFormat:@"%@", res.error]});
+//        }
+//    }];
 
 }
 

@@ -11,6 +11,12 @@
       <excludeFolder url="file://$MODULE_DIR$/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rammus/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rammus/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rammus/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rammus/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rammus/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/rammus/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/App.framework/flutter_assets/packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />

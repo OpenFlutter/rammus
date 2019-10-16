@@ -1,3 +1,8 @@
+## 0.0.5
+
+* 升级SDK
+* 绑定解绑手机号，仅限Android
+
 ## 0.0.4
 
 * use static framework

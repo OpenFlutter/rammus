@@ -43,6 +43,8 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
             call.method == "removeAlias" -> removeAlias(call, result)
             call.method == "listAliases" -> listAliases(result)
             call.method == "setupNotificationManager" -> setupNotificationManager(call, result)
+            call.method == "bindPhoneNumber" -> bindPhoneNumber(call,result)
+            call.method == "unbindPhoneNumber" ->unbindPhoneNumber(result)
             else -> result.notImplemented()
         }
 
@@ -209,6 +211,53 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
             }
         })
     }
+
+    //bindPhoneNumber
+
+
+    private fun bindPhoneNumber(call: MethodCall, result: Result) {
+        val pushService = PushServiceFactory.getCloudPushService()
+        pushService.bindPhoneNumber(call.arguments as String?, object : CommonCallback {
+            override fun onSuccess(response: String?) {
+                result.success(mapOf(
+                        "isSuccessful" to true,
+                        "response" to response
+                ))
+
+            }
+
+            override fun onFailed(errorCode: String?, errorMessage: String?) {
+                result.success(mapOf(
+                        "isSuccessful" to false,
+                        "errorCode" to errorCode,
+                        "errorMessage" to errorMessage
+                ))
+            }
+        })
+    }
+
+
+    private fun unbindPhoneNumber(result: Result) {
+        val pushService = PushServiceFactory.getCloudPushService()
+        pushService.unbindPhoneNumber(object : CommonCallback {
+            override fun onSuccess(response: String?) {
+                result.success(mapOf(
+                        "isSuccessful" to true,
+                        "response" to response
+                ))
+
+            }
+
+            override fun onFailed(errorCode: String?, errorMessage: String?) {
+                result.success(mapOf(
+                        "isSuccessful" to false,
+                        "errorCode" to errorCode,
+                        "errorMessage" to errorMessage
+                ))
+            }
+        })
+    }
+
 
     private fun bindTag(call: MethodCall, result: Result) {
 //        target: Int, tags: Array<String>, alias: String, callback: CommonCallback
