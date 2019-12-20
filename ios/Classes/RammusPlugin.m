@@ -20,7 +20,7 @@ NSString *_isSuccessful = @"isSuccessful";
 
 //__weak NSDictionary *_launchOptions;
 
-__weak FlutterMethodChannel *_methodChannel;
+FlutterMethodChannel *_methodChannel;
 UNNotificationPresentationOptions _notificationPresentationOption = UNNotificationPresentationOptionNone;
 
 - (instancetype)initWithRegistrar:(NSObject <FlutterPluginRegistrar> *)registrar methodChannel:(FlutterMethodChannel *)flutterMethodChannel {
