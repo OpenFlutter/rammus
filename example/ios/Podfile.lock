@@ -6,7 +6,6 @@ PODS:
     - AlicloudUTDID
   - AlicloudUTDID (1.1.0.19)
   - AlicloudUtils (1.3.7):
-    - AlicloudUT
     - AlicloudUTDID
   - Flutter (1.0.0)
   - rammus (0.0.1):
@@ -34,10 +33,10 @@ SPEC CHECKSUMS:
   AlicloudPush: c7cfdbd6a8034507c8772a052737f13ce607f32e
   AlicloudUT: 49bfd91133899e693d1271b483ba7e64423b609e
   AlicloudUTDID: 79f509c3e997ef85fe307f8bfb2bb3be27f7e205
-  AlicloudUtils: 6fcdca0f544e312942c75c587230597c0afb908e
+  AlicloudUtils: ec441e41aa746d779c2c3958aa9489c59cb434ea
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   rammus: b742412b5535e367fce5c30b82d36c8fcb06271a
 
 PODFILE CHECKSUM: 780e706b311d38b827d75355a3c94c700ac52104
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4

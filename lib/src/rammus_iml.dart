@@ -143,8 +143,6 @@ Future<CommonCallbackResult> unbindAccount() async {
       iosError: result["iosError"]);
 }
 
-
-
 ///Android only
 Future<CommonCallbackResult> bindPhoneNumber(String phoneNumber) async {
   var result = await _channel.invokeMethod("bindPhoneNumber", phoneNumber);
@@ -156,10 +154,9 @@ Future<CommonCallbackResult> bindPhoneNumber(String phoneNumber) async {
       iosError: result["iosError"]);
 }
 
-
 ///Android only
 
-Future<CommonCallbackResult> unbindPhoneNumber()async {
+Future<CommonCallbackResult> unbindPhoneNumber() async {
   var result = await _channel.invokeMethod("unbindPhoneNumber");
   return CommonCallbackResult(
       isSuccessful: result["isSuccessful"],
@@ -255,7 +252,6 @@ Future<CommonCallbackResult> addAlias(String alias) async {
       iosError: result["iosError"]);
 }
 
-
 ///Android 文档
 ///删除别名
 ///删除设备别名；
@@ -269,8 +265,6 @@ Future<CommonCallbackResult> removeAlias(String alias) async {
       errorMessage: result["errorMessage"],
       iosError: result["iosError"]);
 }
-
-
 
 ///Android 文档
 ///查询设备别名；
