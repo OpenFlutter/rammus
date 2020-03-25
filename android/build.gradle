@@ -37,7 +37,7 @@ android {
     defaultConfig {
         minSdkVersion 16
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-consumer-proguard-rules.pro'
+        consumerProguardFiles 'consumer-proguard-rules.pro'
     }
     lintOptions {
         disable 'InvalidPackage'
