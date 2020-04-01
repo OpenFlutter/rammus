@@ -429,9 +429,8 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
 //            mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
             //最后在notificationmanager中创建该通知渠道
             mNotificationManager.createNotificationChannel(mChannel)
-
-            result.success(true)
         }
 
+        result.success(true)
     }
 }

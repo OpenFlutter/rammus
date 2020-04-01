@@ -60,7 +60,6 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
         [self configureNotificationPresentationOption:call result:result];
     }else if([@"setupNotificationManager" isEqualToString:call.method]){
         result(@YES);
-        
     }else {
         result(FlutterMethodNotImplemented);
     }
