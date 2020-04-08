@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.os.Handler
-import android.util.Log
 import com.alibaba.sdk.android.push.CommonCallback
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory
 import io.flutter.plugin.common.MethodCall
@@ -43,8 +42,8 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
             call.method == "removeAlias" -> removeAlias(call, result)
             call.method == "listAliases" -> listAliases(result)
             call.method == "setupNotificationManager" -> setupNotificationManager(call, result)
-            call.method == "bindPhoneNumber" -> bindPhoneNumber(call,result)
-            call.method == "unbindPhoneNumber" ->unbindPhoneNumber(result)
+            call.method == "bindPhoneNumber" -> bindPhoneNumber(call, result)
+            call.method == "unbindPhoneNumber" -> unbindPhoneNumber(result)
             else -> result.notImplemented()
         }
 
@@ -265,7 +264,8 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         val tagsInArrayList = call.argument("tags") ?: arrayListOf<String>()
         val alias = call.argument<String?>("alias")
 
-        val tags: Array<String> = tagsInArrayList.toArray() as Array<String>
+        val arr = arrayOfNulls<String>(tagsInArrayList.size)
+        val tags: Array<String> = tagsInArrayList.toArray(arr)
 
         val pushService = PushServiceFactory.getCloudPushService()
 
