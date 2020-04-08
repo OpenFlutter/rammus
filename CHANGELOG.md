@@ -1,3 +1,6 @@
+## 1.0.2
+* Fix #11
+
 ## 1.0.1
 * 升级kotlin,gradle
 * 修复proguard问题
