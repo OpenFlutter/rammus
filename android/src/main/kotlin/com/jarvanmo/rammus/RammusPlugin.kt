@@ -295,8 +295,8 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         val tagsInArrayList = call.argument("tags") ?: arrayListOf<String>()
         val alias = call.argument<String?>("alias")
 
-
-        val tags: Array<String> = tagsInArrayList.toArray() as Array<String>
+        val arr = arrayOfNulls<String>(tagsInArrayList.size)
+        val tags: Array<String> = tagsInArrayList.toArray(arr)
 
         val pushService = PushServiceFactory.getCloudPushService()
 
