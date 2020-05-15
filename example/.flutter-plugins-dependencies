@@ -1,1 +1,1 @@
-{"_info":"// This is a generated file; do not edit or check into version control.","dependencyGraph":[{"name":"rammus","dependencies":[]}]}
+{"info":"This is a generated file; do not edit or check into version control.","plugins":{"ios":[{"name":"rammus","path":"D:\\\\ASProjects\\\\rammus\\\\","dependencies":[]}],"android":[{"name":"rammus","path":"D:\\\\ASProjects\\\\rammus\\\\","dependencies":[]}],"macos":[],"linux":[],"windows":[],"web":[]},"dependencyGraph":[{"name":"rammus","dependencies":[]}],"date_created":"2020-05-15 18:43:50.521451","version":"1.18.0-6.0.pre.83"}
