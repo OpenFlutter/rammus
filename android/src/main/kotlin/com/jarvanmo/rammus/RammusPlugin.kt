@@ -22,6 +22,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 class RammusPlugin(private val registrar: Registrar, private val methodChannel: MethodChannel) : MethodCallHandler {
     companion object {
         private const val TAG = "RammusPlugin"
+        private val inHandler = Handler()
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "com.jarvanmo/rammus")
@@ -29,10 +30,29 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
             channel.setMethodCallHandler(RammusPlugin(registrar, channel))
         }
         @JvmStatic
-        fun initPushService(application: Application, callback:CommonCallback){
+        fun initPushService(application: Application){
             PushServiceFactory.init(application.applicationContext)
             val pushService = PushServiceFactory.getCloudPushService()
-            pushService.register(application.applicationContext, callback)
+            pushService.register(application.applicationContext, object : CommonCallback {
+                override fun onSuccess(response: String?) {
+                    inHandler.postDelayed({
+                        RammusPushHandler.methodChannel?.invokeMethod("initCloudChannelResult", mapOf(
+                                "isSuccessful" to true,
+                                "response" to response
+                        ))
+                    }, 2000)
+                }
+
+                override fun onFailed(errorCode: String?, errorMessage: String?) {
+                    inHandler.postDelayed({
+                        RammusPushHandler.methodChannel?.invokeMethod("initCloudChannelResult", mapOf(
+                                "isSuccessful" to false,
+                                "errorCode" to errorCode,
+                                "errorMessage" to errorMessage
+                        ))
+                    }, 2000)
+                }
+            })
             pushService.setPushIntentService(RammusPushIntentService::class.java)
             val appInfo = application.packageManager
                     .getApplicationInfo(application.packageName, PackageManager.GET_META_DATA)
@@ -79,11 +99,8 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         }
     }
 
-    private val handler = Handler()
-
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-            "initCloudChannel" -> initCloudChannel(call, result)
             "deviceId" -> result.success(PushServiceFactory.getCloudPushService().deviceId)
             "turnOnPushChannel" -> turnOnPushChannel(result)
             "turnOffPushChannel" -> turnOffPushChannel(result)
@@ -102,59 +119,6 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
             else -> result.notImplemented()
         }
 
-    }
-
-
-    private fun initCloudChannel(call: MethodCall, result: Result) {
-        result.success(true)
-//        val pushService = PushServiceFactory.getCloudPushService()
-//        val appKey = call.argument<String?>("appKey")
-//        val appSecret = call.argument<String?>("appSecret")
-//
-//        val initCloudChannelResult = "initCloudChannelResult"
-//
-//
-//        pushService.setPushIntentService(RammusPushIntentService::class.java)
-//
-//        val callback = object : CommonCallback {
-//            override fun onSuccess(response: String?) {
-//                handler.post {
-//                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
-//                            "isSuccessful" to true,
-//                            "response" to response
-//                    ))
-//                    RammusPushHandler.methodChannel = methodChannel
-//                }
-//
-//                Log.e("TAG", "成功")
-//
-//            }
-//
-//            override fun onFailed(errorCode: String?, errorMessage: String?) {
-//                handler.post {
-//                    methodChannel.invokeMethod(initCloudChannelResult, mapOf(
-//                            "isSuccessful" to false,
-//                            "errorCode" to errorCode,
-//                            "errorMessage" to errorMessage
-//                    ))
-//                }
-//
-//                Log.e("TAG", "失败")
-//
-//            }
-//
-//        }
-//        if (appKey.isNullOrBlank() || appSecret.isNullOrBlank()) {
-//
-//            pushService.register(registrar.context().applicationContext, callback)
-//
-//        } else {
-//
-//            pushService.register(registrar.context().applicationContext, appKey, appSecret, callback)
-//
-//        }
-//
-//        result.success(true)
     }
 
 

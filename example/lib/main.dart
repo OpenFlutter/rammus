@@ -17,6 +17,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    rammus.initCloudChannelResult.listen((data) {
+      print(
+          "----------->init successful ${data.isSuccessful} ${data.errorCode} ${data.errorMessage}");
+    });
     var channels = List<rammus.NotificationChannel>();
     channels.add(rammus.NotificationChannel(
       "centralized_activity",
@@ -30,10 +34,13 @@ class _MyAppState extends State<MyApp> {
       "心理测评",
       importance: rammus.AndroidNotificationImportance.MAX,
     ));
+    channels.add(rammus.NotificationChannel(
+      "system_notice",
+      "公告信息",
+      "公告信息",
+      importance: rammus.AndroidNotificationImportance.MAX,
+    ));
     rammus.setupNotificationManager(channels);
-//    rammus.initCloudChannelResult.listen((data){
-//      print("----------->init successful ${data.isSuccessful} ${data.errorCode} ${data.errorMessage}");
-//    });
 
     rammus.onNotification.listen((data) {
       print("----------->notification here ${data.summary}");

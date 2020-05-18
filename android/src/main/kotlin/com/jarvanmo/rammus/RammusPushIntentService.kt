@@ -12,7 +12,7 @@ import com.alibaba.sdk.android.push.notification.CPushMessage
  * 万里飞雪，将穹苍作烘炉，熔万物为白银。
  **/
 class RammusPushIntentService : AliyunMessageIntentService() {
-    val handler = Handler()
+    private val handler = Handler()
 
     override fun onNotificationRemoved(context: Context, messageId: String?) {
 //        Log.e("TAG","data-2 is $messageId")

@@ -16,16 +16,15 @@ class PopupPushActivity: AndroidPopupActivity() {
                 "title" to title,
                 "summary" to summary,
                 "extras" to extras
-        ))
+            ))
             finish()
-        }, 3000)
+        }, 5000)
 
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-
     }
 
 

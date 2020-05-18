@@ -10,16 +10,16 @@ import 'common_callback_result.dart';
 final MethodChannel _channel = const MethodChannel('com.jarvanmo/rammus')
   ..setMethodCallHandler(_handler);
 
-//StreamController<CommonCallbackResult> _initCloudChannelResultController =
-//    StreamController.broadcast();
+StreamController<CommonCallbackResult> _initCloudChannelResultController =
+    StreamController.broadcast();
 
 ///注意可能被多次调用。
 ///Android SDK文档原话如下：
 ///如果设备成功注册，将回调callback.onSuccess()方法。
 ///但如果注册服务器连接失败，则调用callback.onFailed方法，并且自动进行重新注册，直到onSuccess为止。（重试规则会由网络切换等时间自动触发。）
 ///请在网络通畅的情况下进行相关的初始化调试，如果网络不通，或者App信息配置错误，在onFailed方法中，会有相应的错误码返回，可参考错误处理
-//Stream<CommonCallbackResult> get initCloudChannelResult =>
-//    _initCloudChannelResultController.stream;
+Stream<CommonCallbackResult> get initCloudChannelResult =>
+    _initCloudChannelResultController.stream;
 
 ///用于接收服务端推送的消息。
 ///消息不会弹窗，而是回调该方法。
@@ -323,12 +323,12 @@ Future configureNotificationPresentationOption(
 
 Future<dynamic> _handler(MethodCall methodCall) {
   if ("initCloudChannelResult" == methodCall.method) {
-//    _initCloudChannelResultController.add(CommonCallbackResult(
-//      isSuccessful: methodCall.arguments["isSuccessful"],
-//      response: methodCall.arguments["response"],
-//      errorCode: methodCall.arguments["errorCode"],
-//      errorMessage: methodCall.arguments["errorMessage"],
-//    ));
+    _initCloudChannelResultController.add(CommonCallbackResult(
+      isSuccessful: methodCall.arguments["isSuccessful"],
+      response: methodCall.arguments["response"],
+      errorCode: methodCall.arguments["errorCode"],
+      errorMessage: methodCall.arguments["errorMessage"],
+    ));
   } else if ("onMessageArrived" == methodCall.method) {
     _onMessageArrivedController.add(CloudPushMessage(
       messageId: methodCall.arguments["messageId"],
@@ -367,7 +367,7 @@ Future<dynamic> _handler(MethodCall methodCall) {
 }
 
 dispose() {
-//  _initCloudChannelResultController.close();
+  _initCloudChannelResultController.close();
   _onMessageArrivedController.close();
   _onNotificationController.close();
   _onNotificationRemovedController.close();
