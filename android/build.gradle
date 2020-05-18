@@ -36,8 +36,8 @@ android {
     }
     defaultConfig {
         minSdkVersion 16
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-proguard-rules.pro'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //consumerProguardFiles 'consumer-proguard-rules.pro'
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -47,5 +47,16 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api 'com.aliyun.ams:alicloud-android-push:3.1.6'
+    api 'com.aliyun.ams:alicloud-android-push:3.1.9.1'
+    api 'com.aliyun.ams:alicloud-android-third-push:3.1.0@aar'
+    /*implementation 'com.aliyun.ams:huawei-push:2.6.3.305'
+    implementation 'com.aliyun.ams:huawei-push-base:2.6.3.305'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    implementation 'com.aliyun.ams:meizu-push:3.8.7.1'
+    implementation 'com.aliyun.ams:third_vivopush:2.9.0.1'*/
+    compileOnly 'com.aliyun.ams:huawei-push:2.6.3.305'
+    compileOnly 'com.aliyun.ams:huawei-push-base:2.6.3.305'
+    compileOnly 'com.google.firebase:firebase-messaging:17.6.0'
+    compileOnly 'com.aliyun.ams:meizu-push:3.8.7.1'
+    compileOnly 'com.aliyun.ams:third_vivopush:2.9.0.1'
 }

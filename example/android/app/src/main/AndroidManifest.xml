@@ -11,15 +11,48 @@
         android:name=".MyApplication"
         android:label="rammus_example"
         tools:replace="android:label"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data
-            android:name="com.alibaba.app.appkey"
-            android:value="" /> <!-- 请填写你自己的- appKey -->
+          android:name="com.alibaba.app.appkey"
+          android:value="" /> <!-- 请填写你自己的- appKey -->
         <meta-data
-            android:name="com.alibaba.app.appsecret"
-            android:value="" /> <!-- 请填写你自己的appSecret -->
-
+          android:name="com.alibaba.app.appsecret"
+          android:value="" /> <!-- 请填写你自己的appSecret -->
+        <meta-data
+          android:name="com.huawei.hms.client.appid"
+          android:value="" />
+        <meta-data
+          android:name="com.xiaomi.push.client.app_id"
+          android:value=""/>
+        <meta-data
+          android:name="com.xiaomi.push.client.app_key"
+          android:value="" />
+        <meta-data
+          android:name="com.oppo.push.client.app_key"
+          android:value="" />
+        <meta-data
+          android:name="com.oppo.push.client.app_secret"
+          android:value="" />
+        <meta-data
+          android:name="com.meizu.push.client.app_id"
+          android:value="" />
+        <meta-data
+          android:name="com.meizu.push.client.app_key"
+          android:value="" />
+        <meta-data
+          android:name="com.vivo.push.app_id"
+          android:value="" />
+        <meta-data
+          android:name="com.vivo.push.api_key"
+          android:value="" />
+        <meta-data
+          android:name="com.gcm.push.send_id"
+          android:value="" />
+        <meta-data
+          android:name="com.gcm.push.app_id"
+          android:value="" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -39,5 +72,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="com.jarvanmo.rammus.PopupPushActivity" android:exported="true"/>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 </manifest>

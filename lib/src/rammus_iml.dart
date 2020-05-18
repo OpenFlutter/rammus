@@ -10,16 +10,16 @@ import 'common_callback_result.dart';
 final MethodChannel _channel = const MethodChannel('com.jarvanmo/rammus')
   ..setMethodCallHandler(_handler);
 
-//StreamController<CommonCallbackResult> _initCloudChannelResultController =
-//    StreamController.broadcast();
+StreamController<CommonCallbackResult> _initCloudChannelResultController =
+    StreamController.broadcast();
 
 ///注意可能被多次调用。
 ///Android SDK文档原话如下：
 ///如果设备成功注册，将回调callback.onSuccess()方法。
 ///但如果注册服务器连接失败，则调用callback.onFailed方法，并且自动进行重新注册，直到onSuccess为止。（重试规则会由网络切换等时间自动触发。）
 ///请在网络通畅的情况下进行相关的初始化调试，如果网络不通，或者App信息配置错误，在onFailed方法中，会有相应的错误码返回，可参考错误处理
-//Stream<CommonCallbackResult> get initCloudChannelResult =>
-//    _initCloudChannelResultController.stream;
+Stream<CommonCallbackResult> get initCloudChannelResult =>
+    _initCloudChannelResultController.stream;
 
 ///用于接收服务端推送的消息。
 ///消息不会弹窗，而是回调该方法。
@@ -280,23 +280,33 @@ Future<CommonCallbackResult> listAliases() async {
       iosError: result["iosError"]);
 }
 
+class NotificationChannel{
+  const NotificationChannel(this.id,
+      this.name,
+      this.description,
+      {this.importance=AndroidNotificationImportance.DEFAULT});
+  final String id;
+  final String name;
+  final String description;
+  final AndroidNotificationImportance importance;
+
+  Map<String, dynamic> toJson(){
+    return {
+      "id": id,
+      "name": name,
+      "description": description,
+      "importance": importance.index + 1
+    };
+  }
+}
+
 ///这个方法只对android有效
 ///最好调用这个方法以保证在Android 8以上推送通知好用。
 ///如果不调用这个方法，请确认你自己创建了NotificationChannel。
 ///为了更好的用户体验，一些参数请不要用传[null]。
 ///[id]一定要和后台推送时候设置的通知通道一样，否则Android8.0以上无法完成通知推送。
-Future setupNotificationManager(
-    {String id,
-    String name,
-    String description,
-    AndroidNotificationImportance importance =
-        AndroidNotificationImportance.DEFAULT}) async {
-  return _channel.invokeMethod("setupNotificationManager", {
-    "id": id,
-    "name": name,
-    "description": description,
-    "importance": importance.index + 1
-  });
+Future setupNotificationManager(List<NotificationChannel> channels) async {
+  return _channel.invokeMethod("setupNotificationManager", channels.map((e) => e.toJson()).toList());
 }
 
 ///这个方法仅针对iOS
@@ -313,12 +323,12 @@ Future configureNotificationPresentationOption(
 
 Future<dynamic> _handler(MethodCall methodCall) {
   if ("initCloudChannelResult" == methodCall.method) {
-//    _initCloudChannelResultController.add(CommonCallbackResult(
-//      isSuccessful: methodCall.arguments["isSuccessful"],
-//      response: methodCall.arguments["response"],
-//      errorCode: methodCall.arguments["errorCode"],
-//      errorMessage: methodCall.arguments["errorMessage"],
-//    ));
+    _initCloudChannelResultController.add(CommonCallbackResult(
+      isSuccessful: methodCall.arguments["isSuccessful"],
+      response: methodCall.arguments["response"],
+      errorCode: methodCall.arguments["errorCode"],
+      errorMessage: methodCall.arguments["errorMessage"],
+    ));
   } else if ("onMessageArrived" == methodCall.method) {
     _onMessageArrivedController.add(CloudPushMessage(
       messageId: methodCall.arguments["messageId"],
@@ -357,7 +367,7 @@ Future<dynamic> _handler(MethodCall methodCall) {
 }
 
 dispose() {
-//  _initCloudChannelResultController.close();
+  _initCloudChannelResultController.close();
   _onMessageArrivedController.close();
   _onNotificationController.close();
   _onNotificationRemovedController.close();
