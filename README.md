@@ -28,7 +28,7 @@
             android:value="" /> <!-- 请填写你自己的- appKey -->
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="" /> <
+            android:value="" />
 ```
 
 > 也可以动态设置，具体方式看官方文档
@@ -38,27 +38,60 @@
 好吧，由于SDK的限制，用户只能在`Application`中的`onCreate`里初始化：
 
 ```
-        PushServiceFactory.init(applicationContext)
-        val pushService = PushServiceFactory.getCloudPushService()
-        val callback = object : CommonCallback {
-            override fun onSuccess(response: String?) {
-                Log.e("TAG","success $response")
-
-            }
-
-            override fun onFailed(errorCode: String?, errorMessage: String?) {
-            Log.e("TAG","error $errorMessage")
-
-            }
-        }
-
-        pushService.register(applicationContext,callback)
-        pushService.setPushIntentService(RammusPushIntentService::class.java)
+        RammusPlugin.initPushService(this)
 
 ```
-
-`pushService.setPushIntentService(RammusPushIntentService::class.java)`千万不要忘记设置了。
-
+### 设置第三方推送通道
+在`AndroidManifest.xml`设置第三方推送的相关信息
+```
+        <!-- 华为 -->
+        <meta-data
+          android:name="com.huawei.hms.client.appid"
+          android:value="appid=华为appid" />
+        <!-- 小米 -->
+        <meta-data
+          android:name="com.xiaomi.push.client.app_id"
+          android:value=""/>
+        <meta-data
+          android:name="com.xiaomi.push.client.app_key"
+          android:value="" />
+        <!-- oppo -->
+        <meta-data
+          android:name="com.oppo.push.client.app_key"
+          android:value="" />
+        <meta-data
+          android:name="com.oppo.push.client.app_secret"
+          android:value="" />
+        <!-- meizu -->
+        <meta-data
+          android:name="com.meizu.push.client.app_id"
+          android:value="" />
+        <meta-data
+          android:name="com.meizu.push.client.app_key"
+          android:value="" />
+        <!-- vivo -->
+        <meta-data
+          android:name="com.vivo.push.app_id"
+          android:value="" />
+        <meta-data
+          android:name="com.vivo.push.api_key"
+          android:value="" />
+        <!-- gcm -->
+        <meta-data
+          android:name="com.gcm.push.send_id"
+          android:value="" />
+        <meta-data
+          android:name="com.gcm.push.app_id"
+          android:value="" />
+```
+在app build.gradle文件中添加第三方推送依赖
+```
+        implementation 'com.aliyun.ams:huawei-push:2.6.3.305'
+        implementation 'com.aliyun.ams:huawei-push-base:2.6.3.305'
+        implementation 'com.google.firebase:firebase-messaging:17.6.0'
+        implementation 'com.aliyun.ams:meizu-push:3.8.7.1'
+        implementation 'com.aliyun.ams:third_vivopush:2.9.0.1'
+```
 > Application在Android原生项目里。不会创建的自行百度。
 
 
