@@ -11,35 +11,33 @@ import com.alibaba.sdk.android.push.notification.CPushMessage
  * 冷风如刀，以大地为砧板，视众生为鱼肉。
  * 万里飞雪，将穹苍作烘炉，熔万物为白银。
  **/
+
 class RammusPushIntentService : AliyunMessageIntentService() {
     private val handler = Handler()
 
     override fun onNotificationRemoved(context: Context, messageId: String?) {
-//        Log.e("TAG","data-2 is $messageId")
+        Log.d("RammusPushIntentService","onNotificationRemoved messageId is $messageId")
 
-        handler.post {
+        handler.postDelayed( {
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationRemoved", messageId)
-        }
+        },1500)
     }
 
     override fun onNotification(context: Context, title: String?, summary: String?, extras: MutableMap<String, String>?) {
-//        Log.e("TAG","data-1 is ${summary}")
-
-//        Context context, String title, String summary, Map<String, String> extraMap)
-        handler.post {
+        Log.d("RammusPushIntentService","onNotification title is $title, summary is $summary, extras: $extras")
+        handler.postDelayed({
 
             RammusPushHandler.methodChannel?.invokeMethod("onNotification", mapOf(
                     "title" to title,
                     "summary" to summary,
                     "extras" to extras
             ))
-        }
+        },1500)
     }
 
     override fun onMessage(context: Context, message: CPushMessage) {
-//        Log.e("TAG","data1 is ${message.content}")
-
-        handler.post {
+        Log.d("RammusPushIntentService","onMessage title is ${message.title}, messageId is ${message.messageId}, content is ${message.content}")
+        handler.postDelayed( {
             RammusPushHandler.methodChannel?.invokeMethod("onMessageArrived", mapOf(
                     "appId" to message.appId,
                     "content" to message.content,
@@ -47,27 +45,24 @@ class RammusPushIntentService : AliyunMessageIntentService() {
                     "title" to message.title,
                     "traceInfo" to message.traceInfo
             ))
-        }
+        },1500)
     }
 
     override fun onNotificationOpened(p0: Context?, title: String?, summary: String?, extras: String?) {
 
-//        Log.e("TAG","data2 is $summary")
-
-        handler.post {
-
+        Log.d("RammusPushIntentService","onNotificationOpened title is $title, summary is $summary, extras: $extras")
+        handler.postDelayed({
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationOpened", mapOf(
                     "title" to title,
                     "summary" to summary,
                     "extras" to extras
             ))
-        }
+        },1500)
     }
 
     override fun onNotificationReceivedInApp(p0: Context?, title: String?, summary: String?, extras: MutableMap<String, String>?, openType: Int, openActivity: String?, openUrl: String?) {
-//        Log.e("TAG","data3 is $summary")
-
-        handler.post {
+        Log.d("RammusPushIntentService","onNotificationReceivedInApp title is $title, summary is $summary, extras: $extras")
+        handler.postDelayed( {
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationReceivedInApp", mapOf(
                     "title" to title,
                     "summary" to summary,
@@ -76,19 +71,17 @@ class RammusPushIntentService : AliyunMessageIntentService() {
                     "openActivity" to openActivity,
                     "openUrl" to openUrl
             ))
-        }
+        },1500)
     }
 
     override fun onNotificationClickedWithNoAction(context: Context, title: String?, summary: String?, extras: String?) {
-//        Log.e("TAG","data4 is $summary")
-
-        handler.post {
-
+        Log.d("RammusPushIntentService","onNotificationClickedWithNoAction title is $title, summary is $summary, extras: $extras")
+        handler.postDelayed(  {
             RammusPushHandler.methodChannel?.invokeMethod("onNotificationClickedWithNoAction", mapOf(
                     "title" to title,
                     "summary" to summary,
                     "extras" to extras
             ))
-        }
+        }, 1500)
     }
 }
