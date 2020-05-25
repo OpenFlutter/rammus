@@ -259,8 +259,7 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
 
     UNNotificationRequest *request = notification.request;
     UNNotificationContent *content = request.content;
-
-    NSDictionary *userInfo = content.userInfo;
+    NSDictionary *extras = content.userInfo;
     // 通知时间
     NSDate *noticeDate = notification.date;
     // 标题
@@ -272,48 +271,61 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
     // 角标
     int badge = [content.badge intValue];
     // 取得通知自定义字段内容，例：获取key为"Extras"的内容
-    NSString *extras = [userInfo valueForKey:@"Extras"];
+    // NSString *extras = [userInfo valueForKey:@"Extras"];
     // 通知角标数清0
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // 同步角标数到服务端
     // [self syncBadgeNum:0];
     // 通知打开回执上报
-    [CloudPushSDK sendNotificationAck:userInfo];
+    [CloudPushSDK sendNotificationAck:extras];
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     NSLog(@"Notification, date: %@, title: %@, subtitle: %@, body: %@, badge: %d, extras: %@.", noticeDate, title, subtitle, body, badge, extras);
-
     if (title != nil) {
         result[@"title"] = title;
     }
-
     if (body != nil) {
         result[@"summary"] = body;
     }
-
     if (extras != nil) {
-        result[@"extras"] = extras;
+        result[@"extras"] = [self convertToJsonData:extras];
     }
-
     if (subtitle != nil) {
         result[@"subtitle"] = subtitle;
     }
-
-
     if (badge != nil) {
         result[@"badge"] = @(badge);
     }
-
-
     if (request.identifier != nil) {
         result[@"messageId"] = request.identifier;
     }
     if (fromFront) {
         [_methodChannel invokeMethod:@"onNotification" arguments:result];
     } else {
-        [_methodChannel invokeMethod:@"onNotificationOpened" arguments:result];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_methodChannel invokeMethod:@"onNotificationOpened" arguments:result];
+        });
     }
 }
 
+-(NSString *)convertToJsonData:(NSDictionary *)dict{
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
+    NSString *jsonString;
+    if (!jsonData) {
+        NSLog(@"%@",error);
+    }else{
+        jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    NSMutableString *mutStr = [NSMutableString stringWithString:jsonString];
+    NSRange range = {0,jsonString.length};
+    //去掉字符串中的空格
+    [mutStr replaceOccurrencesOfString:@" " withString:@"" options:NSLiteralSearch range:range];
+    NSRange range2 = {0,mutStr.length};
+    //去掉字符串中的换行符
+    [mutStr replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range2];
+    return mutStr;
+
+}
 
 /**
  *  App处于前台时收到通知(iOS 10+)
