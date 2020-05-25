@@ -255,7 +255,7 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
 /**
  *  处理iOS 10通知(iOS 10+)
  */
-- (void)handleiOS10Notification:(UNNotification *)notification {
+- (void)handleiOS10Notification:(UNNotification *)notification fromFront:(BOOL)fromFront {
 
     UNNotificationRequest *request = notification.request;
     UNNotificationContent *content = request.content;
@@ -307,8 +307,11 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
     if (request.identifier != nil) {
         result[@"messageId"] = request.identifier;
     }
-
-    [_methodChannel invokeMethod:@"onNotification" arguments:result];
+    if (fromFront) {
+        [_methodChannel invokeMethod:@"onNotification" arguments:result];
+    } else {
+        [_methodChannel invokeMethod:@"onNotificationOpened" arguments:result];
+    }
 }
 
 
@@ -318,7 +321,7 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
     NSLog(@"Receive a notification in foregound.");
     // 处理iOS 10通知，并上报通知打开回执
-    [self handleiOS10Notification:notification];
+    [self handleiOS10Notification:notification fromFront:YES];
     completionHandler(_notificationPresentationOption);
     // 通知不弹出
 //    completionHandler(UNNotificationPresentationOptionNone);
@@ -338,7 +341,7 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
     if ([userAction isEqualToString:UNNotificationDefaultActionIdentifier]) {
 //        NSLog(@"User opened the notification.");
         // 处理iOS 10通知，并上报通知打开回执
-        [self handleiOS10Notification:response.notification];
+        [self handleiOS10Notification:response.notification fromFront:NO];
     }
     // 通知dismiss，category创建时传入UNNotificationCategoryOptionCustomDismissAction才可以触发
     if ([userAction isEqualToString:UNNotificationDismissActionIdentifier]) {
