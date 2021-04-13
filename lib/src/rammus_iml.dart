@@ -280,17 +280,15 @@ Future<CommonCallbackResult> listAliases() async {
       iosError: result["iosError"]);
 }
 
-class NotificationChannel{
-  const NotificationChannel(this.id,
-      this.name,
-      this.description,
-      {this.importance=AndroidNotificationImportance.DEFAULT});
+class NotificationChannel {
+  const NotificationChannel(this.id, this.name, this.description,
+      {this.importance = AndroidNotificationImportance.DEFAULT});
   final String id;
   final String name;
   final String description;
   final AndroidNotificationImportance importance;
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       "id": id,
       "name": name,
@@ -306,7 +304,8 @@ class NotificationChannel{
 ///为了更好的用户体验，一些参数请不要用传[null]。
 ///[id]一定要和后台推送时候设置的通知通道一样，否则Android8.0以上无法完成通知推送。
 Future setupNotificationManager(List<NotificationChannel> channels) async {
-  return _channel.invokeMethod("setupNotificationManager", channels.map((e) => e.toJson()).toList());
+  return _channel.invokeMethod(
+      "setupNotificationManager", channels.map((e) => e.toJson()).toList());
 }
 
 ///这个方法仅针对iOS
@@ -319,6 +318,10 @@ Future configureNotificationPresentationOption(
     bool badge: true}) async {
   return _channel.invokeMethod("configureNotificationPresentationOption",
       {"none": none, "sound": sound, "alert": alert, "badge": badge});
+}
+
+Future badgeClean({int num: 0}) async {
+  return _channel.invokeMethod("badgeClean", {"num": num});
 }
 
 Future<dynamic> _handler(MethodCall methodCall) {
