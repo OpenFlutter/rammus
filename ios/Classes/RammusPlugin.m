@@ -60,6 +60,8 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
         [self configureNotificationPresentationOption:call result:result];
     }else if([@"setupNotificationManager" isEqualToString:call.method]){
         result(@YES);
+    }else if([@"badgeClean" isEqualToString:call.method]){
+             [self badgeClean:call result:result];
     }else {
         result(FlutterMethodNotImplemented);
     }
@@ -570,6 +572,18 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
     if(badge){
         _notificationPresentationOption = _notificationPresentationOption | UNNotificationPresentationOptionBadge;
     }
+
+    result(@YES);
+
+}
+
+- (void)badgeClean:(FlutterMethodCall *)call result:(FlutterResult)result {
+
+    int num = [call.arguments[@"num"] intValue];
+
+    [CloudPushSDK syncBadgeNum:num withCallback:^(CloudPushCallbackResult *res) {
+
+    }];
 
     result(@YES);
 
