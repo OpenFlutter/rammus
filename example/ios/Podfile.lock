@@ -13,7 +13,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
   - rammus (from `.symlinks/plugins/rammus/ios`)
 
 SPEC REPOS:
@@ -25,7 +25,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   rammus:
     :path: ".symlinks/plugins/rammus/ios"
 
@@ -34,9 +34,9 @@ SPEC CHECKSUMS:
   AlicloudUT: 49bfd91133899e693d1271b483ba7e64423b609e
   AlicloudUTDID: 79f509c3e997ef85fe307f8bfb2bb3be27f7e205
   AlicloudUtils: ec441e41aa746d779c2c3958aa9489c59cb434ea
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   rammus: b742412b5535e367fce5c30b82d36c8fcb06271a
 
-PODFILE CHECKSUM: 780e706b311d38b827d75355a3c94c700ac52104
+PODFILE CHECKSUM: 7932c6260c2bcee45c969bb2bec9a42f77ba7429
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.1

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:rammus/rammus.dart' as rammus;
@@ -11,17 +12,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  String? _platformVersion = 'Unknown';
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     initPlatformState();
+    if (!Platform.isAndroid) {
+      rammus.configureNotificationPresentationOption();
+    }
     rammus.initCloudChannelResult.listen((data) {
       print(
           "----------->init successful ${data.isSuccessful} ${data.errorCode} ${data.errorMessage}");
     });
-    var channels = List<rammus.NotificationChannel>();
+    var channels = <rammus.NotificationChannel>[];
     channels.add(rammus.NotificationChannel(
       "centralized_activity",
       "集中活动",
@@ -40,6 +44,7 @@ class _MyAppState extends State<MyApp> {
       "公告信息",
       importance: rammus.AndroidNotificationImportance.MAX,
     ));
+    getDeviceId();
     rammus.setupNotificationManager(channels);
 
     rammus.onNotification.listen((data) {
@@ -76,9 +81,16 @@ class _MyAppState extends State<MyApp> {
 //    rammus.initCloudChannel( );
   }
 
+  getDeviceId() async {
+    var deviceId = await rammus.deviceId;
+    print("deviceId:::$deviceId");
+  }
+
+
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
+    String? platformVersion;
+
     // Platform messages may fail, so we use a try/catch PlatformException.
 //    try {
 //      platformVersion = await Rammus.platformVersion;
