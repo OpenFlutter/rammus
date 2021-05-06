@@ -1,9 +1,9 @@
 class CommonCallbackResult {
-  final bool isSuccessful;
-  final String response;
-  final String errorCode;
-  final String errorMessage;
-  final String iosError;
+  final bool? isSuccessful;
+  final String? response;
+  final String? errorCode;
+  final String? errorMessage;
+  final String? iosError;
 
   CommonCallbackResult(
       {this.isSuccessful,
