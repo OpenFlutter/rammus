@@ -28,7 +28,7 @@ flutter:
     platforms:
       android:
         package: com.jarvan.rammus
-        pluginClass: FluwxPlugin
+        pluginClass: RammusPlugin
       ios:
         pluginClass: RammusPlugin
 
