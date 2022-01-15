@@ -41,6 +41,9 @@
         RammusPlugin.initPushService(this)
 
 ```
+
+此步骤仅进行初始化，**未进行推送渠道的注册**，有关注册渠道的信息请看下方[使用方式](#使用方式)部分。
+
 ### 设置第三方推送通道
 在`AndroidManifest.xml`设置第三方推送的相关信息
 ```
@@ -86,11 +89,12 @@
 ```
 在app build.gradle文件中添加第三方推送依赖
 ```
-        implementation 'com.aliyun.ams:huawei-push:2.6.3.305'
-        implementation 'com.aliyun.ams:huawei-push-base:2.6.3.305'
-        implementation 'com.google.firebase:firebase-messaging:17.6.0'
-        implementation 'com.aliyun.ams:meizu-push:3.8.7.1'
-        implementation 'com.aliyun.ams:third_vivopush:2.9.0.1'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.7.2'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.7.2'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:3.7.2'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-vivo:3.7.2'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.7.2'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.7.2'
 ```
 > Application在Android原生项目里。不会创建的自行百度。
 
@@ -118,3 +122,17 @@ source 'https://github.com/aliyun/aliyun-specs.git'
   rammus.configureNotificationPresentationOption();
 ```
 
+## 使用方式
+
+### 注册推送渠道（Android 端）
+
+> iOS 端目前未将注册渠道与初始化分离，若你的应用目前仅在 iOS 端运行，可以忽略本步骤。
+
+插件提供 `register()` 方法以执行 Android 端 SDK 的 `void register(Context context, CommonCallback callback);`与厂商渠道的 `register` 接口：
+```dart
+    rammus.register();
+```
+
+根据需求可以在用户签署隐私政策后再执行本方法，以防止提前获取到用户敏感信息进而影响应用上架应用市场。
+
+更多请见[阿里云文档](https://help.aliyun.com/document_detail/51056.html)
