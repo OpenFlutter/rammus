@@ -89,12 +89,12 @@
 ```
 在app build.gradle文件中添加第三方推送依赖
 ```
-        implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.7.2'
-        implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.7.2'
-        implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:3.7.2'
-        implementation 'com.aliyun.ams:alicloud-android-third-push-vivo:3.7.2'
-        implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.7.2'
-        implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.7.2'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:$version'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:$version'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:$version'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-vivo:$version'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:$version'
+        implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:$version'
 ```
 > Application在Android原生项目里。不会创建的自行百度。
 
