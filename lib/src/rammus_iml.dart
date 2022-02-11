@@ -332,6 +332,14 @@ Future badgeClean({int num: 0}) async {
   return _channel.invokeMethod("badgeClean", {"num": num});
 }
 
+///这个方法近针对ios
+///清理图标上的角标
+Future applicationBadgeNumberClean({int num: 0}) async {
+   if (Platform.isIOS){
+     return  _channel.invokeMethod("applicationBadgeNumberClean", {"num": num});
+   }
+}
+
 Future<dynamic> _handler(MethodCall methodCall) {
   if ("initCloudChannelResult" == methodCall.method) {
     _initCloudChannelResultController.add(CommonCallbackResult(
