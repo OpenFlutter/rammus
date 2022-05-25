@@ -2,12 +2,12 @@ group 'com.jarvanmo.rammus'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.6.21'
     repositories {
         google()
         mavenCentral()
         maven {
-            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
+            url 'https://maven.aliyun.com/nexus/content/repositories/releases/'
         }
     }
 
@@ -51,14 +51,15 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //主通道依赖
-    api 'com.aliyun.ams:alicloud-android-push:3.7.3'
+    implementation 'com.aliyun.ams:alicloud-android-push:3.7.7'
     //辅助通道依赖
-    api 'com.aliyun.ams:alicloud-android-third-push:3.7.3@aar'
+    implementation 'com.aliyun.ams:alicloud-android-third-push:3.7.7'
+
     //厂商通道依赖
-    implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.7.3'
-    implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.7.3'
-    implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:3.7.3'
-    implementation 'com.aliyun.ams:alicloud-android-third-push-vivo:3.7.3'
-    implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.7.3'
-    implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.7.3'
+    implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.7.7'
+    implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.7.7'
+    implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:3.7.7'
+    implementation 'com.aliyun.ams:alicloud-android-third-push-vivo:3.7.7'
+    implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.7.7'
+    implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.7.7'
 }
