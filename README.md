@@ -86,6 +86,12 @@
         <meta-data
           android:name="com.gcm.push.app_id"
           android:value="" />
+        <meta-data
+          android:name="com.gcm.push.project_id"
+          android:value="" />
+        <meta-data
+          android:name="com.gcm.push.api_key"
+          android:value="" />
 ```
 在app build.gradle文件中添加第三方推送依赖
 ```

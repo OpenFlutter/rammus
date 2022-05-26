@@ -125,10 +125,14 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         }
         val gcmSendId = appInfo.metaData.getString("com.gcm.push.send_id")
         val gcmApplicationId = appInfo.metaData.getString("com.gcm.push.app_id")
+        val gcmProjectId = appInfo.metaData.getString("com.gcm.push.project_id")
+        val gcmApiKey = appInfo.metaData.getString("com.gcm.push.api_key")
         if ((gcmSendId != null && gcmSendId.isNotBlank())
-            && (gcmApplicationId != null && gcmApplicationId.isNotBlank())){
+            && (gcmApplicationId != null && gcmApplicationId.isNotBlank())
+            && (gcmProjectId != null && gcmProjectId.isNotBlank())
+            && (gcmApiKey != null && gcmApiKey.isNotBlank())){
             Log.d(TAG, "正在注册Gcm推送服务...")
-            GcmRegister.register(gottenApplication!!.applicationContext, gcmSendId, gcmApplicationId)
+            GcmRegister.register(gottenApplication!!.applicationContext, gcmSendId, gcmApplicationId, gcmProjectId, gcmApiKey)
         }
     }
 
