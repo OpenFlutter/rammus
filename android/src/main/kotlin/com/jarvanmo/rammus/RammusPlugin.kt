@@ -1,5 +1,8 @@
 package com.jarvanmo.rammus
 
+import android.content.pm.ApplicationInfo
+import android.os.Bundle
+import android.net.Uri
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -57,6 +60,7 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
             "setupNotificationManager" -> setupNotificationManager(call, result)
             "bindPhoneNumber" -> bindPhoneNumber(call, result)
             "unbindPhoneNumber" -> unbindPhoneNumber(result)
+            "applicationBadgeNumberClean" ->setApplicationBadgeNumber(call)
             else -> result.notImplemented()
         }
 
@@ -468,4 +472,33 @@ class RammusPlugin(private val registrar: Registrar, private val methodChannel: 
         }
         result.success(true)
     }
+
+    //设置android角标
+    private fun setApplicationBadgeNumber(call: MethodCall){
+        val appInfo = gottenApplication!!.packageManager
+            .getApplicationInfo(gottenApplication!!.packageName, PackageManager.GET_META_DATA)
+
+        var num = call.argument("num") as Int? ?: 0
+        setHuaWeiApplicationBadgeNumber(num,appInfo)
+
+    }
+
+    //清理华为角标 https://developer.huawei.com/consumer/cn/doc/development/Corner-Guides/30802
+    private fun setHuaWeiApplicationBadgeNumber(num: Int,appInfo: ApplicationInfo) {
+        val huaweiAppId = appInfo.metaData.getString("com.huawei.hms.client.appid")
+        if (huaweiAppId != null && huaweiAppId.toString().isNotBlank()){
+            try {
+                val bundle = Bundle()
+                bundle.putString("package", registrar.context().packageName) // com.test.badge is your package name
+                bundle.putString("class", registrar.context().packageName+".MainActivity") // com.test. badge.MainActivity is your apk main activity
+                bundle.putInt("badgenumber", num)
+                gottenApplication!!.contentResolver.call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", null, bundle)
+
+            } catch (e: Exception) {
+                Log.w(TAG, "setHuaWeiApplicationBadgeNumberClean: 失败"+e.message)
+            }
+        }
+
+    }
+
 }
