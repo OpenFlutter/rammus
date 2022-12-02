@@ -12,7 +12,7 @@ class CloudPushMessage {
 class OnNotification {
   final String? title;
   final String? summary;
-  final Map? extras;
+  final String? extras;
 
   OnNotification(this.title, this.summary, this.extras);
 }
