@@ -76,6 +76,15 @@ UNNotificationPresentationOptions _notificationPresentationOption = UNNotificati
     [self initCloudPush];
     [self listenerOnChannelOpened];
     [self registerMessageReceive];
+    //当点击Push通知进入App时，会丢失Push内容，所以通过 launchOptions 获取是否是通过Push通知打开App的
+    NSDictionary* pushInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (pushInfo) {//推送信息
+        [CloudPushSDK sendNotificationAck:pushInfo];
+        //延迟通知flutter，否则flutter程序没有构建时会导致通知消息丢失
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_methodChannel invokeMethod:@"onNotificationOpened" arguments:@{@"extras":[self convertToJsonData:pushInfo],@"title":@"title",@"subtitle":@"subtitle",@"badge":@1,@"summary":@""}];
+        });
+    }
     [CloudPushSDK sendNotificationAck:launchOptions];
 
     return NO;
